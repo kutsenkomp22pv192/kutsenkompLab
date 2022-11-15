@@ -1,4 +1,7 @@
 package tech.reliab.course.kutsenkomp.bank.entity;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class User {
@@ -12,6 +15,7 @@ public class User {
 
     public User(int id, String fullName, Date birthDate,  String workAddress,
                 float monthIncome, Bank bank, float rate) {
+        bank.setCountClients(bank.getCountClients() + 1);
         this.id = id;
         this.fullName = fullName;
         this.birthDate = birthDate;
@@ -33,10 +37,11 @@ public class User {
 
     @Override
     public String toString() {
-        return "BankOffice{" +
+
+        return "User{" +
                 "id=" + id +
                 ", fullName='" + fullName + '\'' +
-                ", birthDate='" + birthDate + '\'' +
+                ", birthDate='"+ new SimpleDateFormat("MM/dd/yyyy").format(birthDate.getTime())+
                 ", workAddress=" + workAddress +
                 ", monthIncome=" + monthIncome +
                 ", bank=" + bank +

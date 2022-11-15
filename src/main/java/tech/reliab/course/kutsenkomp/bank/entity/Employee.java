@@ -15,6 +15,7 @@ public class Employee {
     public Employee(int id, String fullName, Date birthDate,
                     String position, Bank bank, boolean worksInOffice,
                     BankOffice bankOffice, boolean canGiveCredit, float monthIncome) {
+        bank.setCountEmployees(bank.getCountEmployees() + 1);
         this.id = id;
         this.fullName = fullName;
         this.birthDate = birthDate;
@@ -27,15 +28,15 @@ public class Employee {
     }
 
     public Employee(Employee employee) {
-        this.id = getId();
-        this.fullName = getFullName();
-        this.birthDate = getBirthDate();
-        this.position = getPosition();
-        this.bankOffice = getBankOffice();
-        this.bank = getBank();
-        this.worksInOffice = getWorksInOffice();
-        this.canGiveCredit = getCanGiveCredit();
-        this.monthIncome = getMonthIncome();
+        this.id = employee.getId();
+        this.fullName = employee.getFullName();
+        this.birthDate = employee.getBirthDate();
+        this.position = employee.getPosition();
+        this.bankOffice = employee.getBankOffice();
+        this.bank = employee.getBank();
+        this.worksInOffice = employee.getWorksInOffice();
+        this.canGiveCredit = employee.getCanGiveCredit();
+        this.monthIncome = employee.getMonthIncome();
     }
 
     @Override

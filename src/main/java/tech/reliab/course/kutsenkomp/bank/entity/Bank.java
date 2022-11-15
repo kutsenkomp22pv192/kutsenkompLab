@@ -93,7 +93,7 @@ public class Bank {
     }
 
     public int getCountClients() {
-        return this.countAtm;
+        return this.countClients;
     }
 
     public void setCountClients(int countClients) {

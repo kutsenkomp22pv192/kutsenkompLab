@@ -18,6 +18,7 @@ public class BankAtm  {
                       String status, Bank bank, BankOffice bankOffice,
                       Employee employee, boolean canGiveMoney,  boolean canInputMoney,
                       float money, float monthCost) {
+        bank.setCountAtm(bank.getCountAtm() + 1);
         this.bank = bank;
         this.id = id;
         this.name = name;
@@ -48,7 +49,7 @@ public class BankAtm  {
 
     @Override
     public String toString() {
-        return "BankOffice{" +
+        return "BankAtm{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", address='" + address + '\'' +

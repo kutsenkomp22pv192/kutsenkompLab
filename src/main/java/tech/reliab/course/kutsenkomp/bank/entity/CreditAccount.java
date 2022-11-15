@@ -1,5 +1,7 @@
 package tech.reliab.course.kutsenkomp.bank.entity;
 
+import java.time.LocalDateTime;
+import java.util.Calendar;
 import java.util.Date;
 
 public class CreditAccount  {
@@ -16,14 +18,17 @@ public class CreditAccount  {
     private PaymentAccount paymentAccount;
 
     public CreditAccount(int id, User user, String bankName, float money,
-                         Date dataStart, Date dataEnd, int countMonth, float monthPayment,
+                         Date dataStart, int countMonth, float monthPayment,
                          float interestRate, Employee employee, PaymentAccount paymentAccount) {
         this.id = id;
         this.user = user;
         this.bankName = bankName;
         this.money = money;
         this.dataStart = dataStart;
-        this.dataEnd = dataEnd;
+        Calendar c = Calendar.getInstance();
+        c.setTime(dataStart);
+        c.add(Calendar.MONTH, countMonth);
+        this.dataEnd = c.getTime();
         this.countMonth = countMonth;
         this.monthPayment = monthPayment;
         this.interestRate = interestRate;
@@ -32,17 +37,17 @@ public class CreditAccount  {
     }
 
     public CreditAccount(CreditAccount creditAccount) {
-        this.id = getId();
-        this.user = getUser();
-        this.bankName = getBankName();
-        this.money = getMoney();
-        this.dataStart = getDataStart();
-        this.dataEnd = getDataEnd();
-        this.countMonth = getCountMonth();
-        this.monthPayment = getMonthPayment();
-        this.interestRate = getInterestRate();
-        this.employee = getEmployee();
-        this.paymentAccount = getPaymentAccount();
+        this.id = creditAccount.getId();
+        this.user = creditAccount.getUser();
+        this.bankName = creditAccount.getBankName();
+        this.money = creditAccount.getMoney();
+        this.dataStart = creditAccount.getDataStart();
+        this.dataEnd = creditAccount.getDataEnd();
+        this.countMonth = creditAccount.getCountMonth();
+        this.monthPayment = creditAccount.getMonthPayment();
+        this.interestRate = creditAccount.getInterestRate();
+        this.employee = creditAccount.getEmployee();
+        this.paymentAccount = creditAccount.getPaymentAccount();
     }
 
     @Override
