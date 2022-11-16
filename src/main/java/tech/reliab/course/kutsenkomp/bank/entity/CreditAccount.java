@@ -1,5 +1,6 @@
 package tech.reliab.course.kutsenkomp.bank.entity;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
@@ -57,8 +58,8 @@ public class CreditAccount  {
                 ", user=" + user +
                 ", bankName='" + bankName + '\'' +
                 ", money=" + money +
-                ", dataStart=" + dataStart +
-                ", dataEnd=" + dataEnd +
+                ", dataStart=" + new SimpleDateFormat("yyyy-MM-dd").format(dataStart.getTime()) +
+                ", dataEnd=" + new SimpleDateFormat("yyyy-MM-dd").format(dataEnd.getTime()) +
                 ", countMonth=" + countMonth +
                 ", monthPayment=" + monthPayment +
                 ", interestRate=" + interestRate +

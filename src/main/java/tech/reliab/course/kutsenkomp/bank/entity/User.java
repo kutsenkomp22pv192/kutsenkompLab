@@ -41,7 +41,7 @@ public class User {
         return "User{" +
                 "id=" + id +
                 ", fullName='" + fullName + '\'' +
-                ", birthDate='"+ new SimpleDateFormat("MM/dd/yyyy").format(birthDate.getTime())+
+                ", birthDate='"+ new SimpleDateFormat("yyyy-MM-dd").format(birthDate.getTime())+
                 ", workAddress=" + workAddress +
                 ", monthIncome=" + monthIncome +
                 ", bank=" + bank +

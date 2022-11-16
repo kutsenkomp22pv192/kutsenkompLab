@@ -1,4 +1,5 @@
 package tech.reliab.course.kutsenkomp.bank.entity;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Employee {
@@ -44,7 +45,7 @@ public class Employee {
         return "Employee{" +
                 "id=" + id +
                 ", fullName='" + fullName + '\'' +
-                ", birthDate=" + birthDate +
+                ", birthDate=" + new SimpleDateFormat("yyyy-MM-dd").format(birthDate.getTime()) +
                 ", position='" + position + '\'' +
                 ", bank=" + bank +
                 ", bankOffice=" + bankOffice +
