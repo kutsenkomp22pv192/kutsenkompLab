@@ -1,11 +1,32 @@
 package tech.reliab.course.kutsenkomp.bank.service.impl;
 
 import tech.reliab.course.kutsenkomp.bank.entity.BankAtm;
+import tech.reliab.course.kutsenkomp.bank.entity.PaymentAccount;
 import tech.reliab.course.kutsenkomp.bank.repositories.BankAtmRepository;
+import tech.reliab.course.kutsenkomp.bank.repositories.BankOfficeRepository;
 import tech.reliab.course.kutsenkomp.bank.service.AtmService;
+import tech.reliab.course.kutsenkomp.bank.service.BankOfficeService;
+import tech.reliab.course.kutsenkomp.bank.service.BankService;
+
+import java.util.List;
 
 public class AtmServiceImpl implements AtmService {
-    BankAtmRepository bankAtmRepository = new BankAtmRepository();
+    private static AtmServiceImpl INSTANCE;
+
+    private AtmServiceImpl() {
+    }
+
+    public static AtmServiceImpl getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new AtmServiceImpl();
+        }
+
+        return INSTANCE;
+    }
+
+    private final BankService bankService = BankServiceImpl.getInstance();
+    private final BankOfficeService bankOfficeService = BankOfficeServiceImpl.getInstance();
+    private final BankAtmRepository bankAtmRepository = BankAtmRepository.getInstance();
 
     /*
      * Добавляет bank и возвращает добаленный объект, если до этого его не существовало
@@ -13,18 +34,22 @@ public class AtmServiceImpl implements AtmService {
      */
     @Override
     public BankAtm add(BankAtm bankAtm) {
-        if(bankAtmRepository.add(bankAtm)){
-            return bankAtmRepository.get();
+
+        var newBankAtm = bankAtmRepository.add(bankAtm);
+        var office = newBankAtm.getBankOffice();
+
+        if (office != null) {
+            bankOfficeService.addAtm(office.getId(), bankAtm);
         }
-        return null;
+        return newBankAtm;
     }
 
     /*
      * Возвращает объект
      */
     @Override
-    public BankAtm get() {
-        return bankAtmRepository.get();
+    public BankAtm get(int id) {
+        return bankAtmRepository.get(id);
     }
 
     /*
@@ -32,7 +57,7 @@ public class AtmServiceImpl implements AtmService {
      * иначе возвращает ложь.
      */
     @Override
-    public boolean update(BankAtm bankAtm) {
+    public BankAtm update(BankAtm bankAtm) {
         return bankAtmRepository.update(bankAtm);
     }
 
@@ -41,7 +66,15 @@ public class AtmServiceImpl implements AtmService {
      * иначе возвращает ложь.
      */
     @Override
-    public boolean delete() {
-        return bankAtmRepository.delete();
+    public boolean delete(int id) {
+        return bankAtmRepository.delete(id);
+    }
+
+    /*
+     * Возвращает лист объектов
+     */
+    @Override
+    public List<BankAtm> getAll(){
+        return bankAtmRepository.findAll();
     }
 }

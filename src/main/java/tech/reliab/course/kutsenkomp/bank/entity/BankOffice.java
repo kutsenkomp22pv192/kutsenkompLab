@@ -20,7 +20,6 @@ public class BankOffice {
                       String status, boolean canGiveMoney,  boolean canInputMoney,
                       boolean canReplaceAtm, int countAtm,
                       boolean canGiveCredit, float money, float monthCost) {
-        bank.setCountOffices(bank.getCountOffices() + 1);
         this.bank = bank;
         this.id = id;
         this.name = name;

@@ -1,52 +1,84 @@
 package tech.reliab.course.kutsenkomp.bank.repositories;
 
+import tech.reliab.course.kutsenkomp.bank.entity.Bank;
+import tech.reliab.course.kutsenkomp.bank.entity.BankAtm;
+import tech.reliab.course.kutsenkomp.bank.entity.Employee;
 import tech.reliab.course.kutsenkomp.bank.entity.User;
 
-public class UserRepository {
-    private User user;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
-    public UserRepository(){}
+public class UserRepository {
+    private static UserRepository INSTANCE;
+
+    private UserRepository() {
+    }
+
+    public static UserRepository getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new UserRepository();
+        }
+
+        return INSTANCE;
+    }
+
+    private final Map<Integer, User> users = new LinkedHashMap<>();
 
     /*
      * Добавляет bank и возвращает добаленный объект, если до этого его не существовало
      * иначе возвращает null.
      */
-    public boolean add(User user){
-        var isEmpty = this.user == null;
-        if (isEmpty){
-            this.user = new User(user);
+    public User add(User user){
+        if (user == null) {
+            return null;
         }
-        return isEmpty;
+
+        this.users.put(user.getId(), user);
+        return user;
     }
 
     /*
      * Удаляет объект и возвращает истину, если объект существовал,
      * иначе возвращает ложь.
      */
-    public boolean delete(){
-        if(this.user == null){
+    public boolean delete(int id){
+        if (!this.users.containsKey(id)) {
             return false;
         }
-        this.user = null;
+
+        users.remove(id);
         return true;
     }
 
     /*
      * Возвращает объект.
      */
-    public User get(){
-        return this.user;
+    public User get(int id){
+        return this.users.get(id);
     }
 
     /*
-     * Обновляет объект и возвращает истину, если он существует,
+     * Возвращает список объектов, которые хранятся в репозитории.
+     */
+    public List<User> findAll() {
+
+        return this.users.values().stream().toList();
+
+    }
+
+    /*
+     * Обновляет объект и возвращает его, если он существует,
      * иначе возвращает ложь.
      */
-    public boolean update(User user){
-        if(this.user == null){
-            return false;
+    public User update(User user) {
+
+        if (user == null || !this.users.containsKey(user.getId())) {
+            return null;
         }
-        this.user = user;
-        return true;
+
+        this.users.replace(user.getId(), user);
+        return get(user.getId());
+
     }
 }

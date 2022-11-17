@@ -1,52 +1,83 @@
 package tech.reliab.course.kutsenkomp.bank.repositories;
 
+import tech.reliab.course.kutsenkomp.bank.entity.Bank;
 import tech.reliab.course.kutsenkomp.bank.entity.BankAtm;
+import tech.reliab.course.kutsenkomp.bank.entity.User;
+
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public class BankAtmRepository {
-    private BankAtm bankAtm;
+    private static BankAtmRepository INSTANCE;
 
-    public BankAtmRepository(){}
+    private BankAtmRepository() {
+    }
+
+    public static BankAtmRepository getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new BankAtmRepository();
+        }
+
+        return INSTANCE;
+    }
+
+    private final Map<Integer, BankAtm> bankAtms = new LinkedHashMap<>();
 
     /*
      * Добавляет bank и возвращает добаленный объект, если до этого его не существовало
      * иначе возвращает null.
      */
-    public boolean add(BankAtm bankAtm){
-        var isEmpty = this.bankAtm == null;
-        if (isEmpty){
-            this.bankAtm = new BankAtm(bankAtm);
+    public BankAtm add(BankAtm bankAtm){
+        if (bankAtm == null) {
+            return null;
         }
-        return isEmpty;
+
+        this.bankAtms.put(bankAtm.getId(), bankAtm);
+        return bankAtm;
     }
 
     /*
      * Удаляет объект и возвращает истину, если объект существовал,
      * иначе возвращает ложь.
      */
-    public boolean delete(){
-        if(this.bankAtm == null){
+    public boolean delete(int id){
+        if (!this.bankAtms.containsKey(id)) {
             return false;
         }
-        this.bankAtm = null;
+
+        bankAtms.remove(id);
         return true;
     }
-
     /*
      * Возвращает объект.
      */
-    public BankAtm get(){
-        return this.bankAtm;
+    public BankAtm get(int id){
+        return this.bankAtms.get(id);
+    }
+
+
+    /*
+     * Возвращает список объектов, которые хранятся в репозитории.
+     */
+    public List<BankAtm> findAll() {
+
+        return this.bankAtms.values().stream().toList();
+
     }
 
     /*
-     * Обновляет объект и возвращает истину, если он существует,
+     * Обновляет объект и возвращает его, если он существует,
      * иначе возвращает ложь.
      */
-    public boolean update(BankAtm bankAtm){
-        if(this.bankAtm == null){
-            return false;
+    public BankAtm update(BankAtm bankAtm) {
+
+        if (bankAtm == null || !this.bankAtms.containsKey(bankAtm.getId())) {
+            return null;
         }
-        this.bankAtm = bankAtm;
-        return true;
+
+        this.bankAtms.replace(bankAtm.getId(), bankAtm);
+        return get(bankAtm.getId());
+
     }
 }

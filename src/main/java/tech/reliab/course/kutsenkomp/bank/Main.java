@@ -11,41 +11,59 @@ import java.util.Date;
 
 public class Main {
     public static void main(String[] args) throws ParseException {
-        BankService bankService = new BankServiceImpl();
-        AtmService atmService = new AtmServiceImpl();
-        BankOfficeService bankOfficeService = new BankOfficeServiceImpl();
-        EmployeeService employeeService = new EmployeeServiceImpl();
-        CreditAccountService creditAccountService = new CreditAccountServiceImpl();
-        PaymentAccountService paymentAccountService = new PaymentAccountServiceImpl();
-        UserService userService = new UserServiceImpl();
+        BankService bankService = BankServiceImpl.getInstance();
+        AtmService atmService = AtmServiceImpl.getInstance();
+        BankOfficeService bankOfficeService = BankOfficeServiceImpl.getInstance();
+        EmployeeService employeeService = EmployeeServiceImpl.getInstance();
+        CreditAccountService creditAccountService = CreditAccountServiceImpl.getInstance();
+        PaymentAccountService paymentAccountService = PaymentAccountServiceImpl.getInstance();
+        UserService userService = UserServiceImpl.getInstance();
 
         DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
+        final int banksNumber = 5;
+        final int officesNumber = 3;
+        final int employeeNumber = 5;
+        final int usersNumber = 5;
+        final int accountsNumber = 2;
 
-        var bank = bankService.add(new Bank(1, "Bank_1", 0, 0, 0, 0,1, 1, 1 ));
+        for (int i = 0; i < banksNumber; i++) {
+            int idBank = i;
+            var bank = bankService.add(new Bank(idBank, "Bank_" + idBank, 0, 0, 0, 0,1, 0, 1 ));
+            Employee employeeForAccount = null;
+            for (int j = 0; j < officesNumber; j++) {
+                int idBankOffice = i * banksNumber + j;
+                var bankOffice = bankOfficeService.add(new BankOffice(bank, idBankOffice, "Office_" + idBankOffice, "Address_" + idBankOffice,"Working", true,  true,true, 0, true, 1, 1));
+                Employee employee = null;
+                for (int k = 0; k < employeeNumber; k++) {
+                    int idEmployee = i * banksNumber + j * officesNumber + k;
+                    employee = employeeService.add(new Employee(idEmployee, "FullName_" + idEmployee, sdf.parse("1988-02-" + idEmployee), "Pos_" + idEmployee, bank, true, bankOffice, true, 1));
+                    if (employeeForAccount == null) {
+                        employeeForAccount = employee;
+                    }
+                }
+                atmService.add(new BankAtm(idBankOffice, "Atm_" + idBankOffice, "Address_" + idBankOffice, "Working", bank, bankOffice, employee, true,  true,1, 1));
+            }
+            for (int j = 0; j < usersNumber; j++) {
+                int idUser = i * banksNumber + j;
+                var user = userService.add(new User(idUser, "fullName_" + idUser, sdf.parse("1999-01-" + idUser),  "Address_" + idUser, 1, bank, 1));
+                for (int k = 0; k < accountsNumber; k++) {
+                    int idAccount = i * banksNumber + j * accountsNumber + k;
+                    var paymentAccount = paymentAccountService.add(new PaymentAccount(idAccount, user, "Bank_" + i, 1));
+                    var creditAccount = creditAccountService.add(new CreditAccount(idAccount, user, "Bank_" + i, 1, new Date(), 1, 1, 1, employeeForAccount, paymentAccount));
+                }
+            }
+        }
 
-        var bankOffice = bankOfficeService.add(new BankOffice(bank, 1, "Office_1", "Address_1","Working", true,  true,true, 0, true, 1, 1));
+        for (int i = 0; i < banksNumber; i++){
+            bankService.outputBankInfo(bankService.getAll().get(i).getId(), System.out);
+        }
 
-        var employee = employeeService.add(new Employee(1, "FullName_1", sdf.parse("1988-01-01"),
-                "Pos_1", bank, true, bankOffice, true, 1));
+        System.out.println("\n---------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
 
-        var atm = atmService.add(new BankAtm(1, "Atm_1", "Address_1",
-                "Working", bank, bankOffice, employee, true,  true,1, 1));
+        for (int i = 0; i < banksNumber * usersNumber; i++){
+            userService.outputUserAccounts(userService.getAll().get(i).getId(), System.out);
+        }
 
-        var user = userService.add(new User(1, "fullName_1", sdf.parse("1999-02-11"),  "Address_1",
-                1, bank, 1));
-
-        var paymentAccount = paymentAccountService.add(new PaymentAccount(1, user, "Bank_1", 1));
-
-        var creditAccount = creditAccountService.add(new CreditAccount(1, user, "Bank_1", 1, new Date(), 1, 1,
-                1, employee, paymentAccount));
-
-        System.out.println(bank);
-        System.out.println(bankOffice);
-        System.out.println(employee);
-        System.out.println(atm);
-        System.out.println(user);
-        System.out.println(creditAccount);
-        System.out.println(paymentAccount);
     }
 }

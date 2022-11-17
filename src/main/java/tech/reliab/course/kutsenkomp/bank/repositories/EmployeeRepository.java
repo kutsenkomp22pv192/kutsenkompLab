@@ -1,52 +1,85 @@
 package tech.reliab.course.kutsenkomp.bank.repositories;
 
+import tech.reliab.course.kutsenkomp.bank.entity.Bank;
+import tech.reliab.course.kutsenkomp.bank.entity.BankAtm;
+import tech.reliab.course.kutsenkomp.bank.entity.CreditAccount;
 import tech.reliab.course.kutsenkomp.bank.entity.Employee;
 
-public class EmployeeRepository {
-    private Employee employee;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
-    public EmployeeRepository(){}
+public class EmployeeRepository {
+    private static EmployeeRepository INSTANCE;
+
+    private EmployeeRepository() {
+    }
+
+    public static EmployeeRepository getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new EmployeeRepository();
+        }
+
+        return INSTANCE;
+    }
+
+    private final Map<Integer, Employee> employees = new LinkedHashMap<>();
 
     /*
      * Добавляет bank и возвращает добаленный объект, если до этого его не существовало
      * иначе возвращает null.
      */
-    public boolean add(Employee employee){
-        var isEmpty = this.employee == null;
-        if (isEmpty){
-            this.employee = new Employee(employee);
+    public Employee add(Employee employee){
+        if (employee == null) {
+            return null;
         }
-        return isEmpty;
+
+        this.employees.put(employee.getId(), employee);
+        return employee;
     }
 
     /*
      * Удаляет объект и возвращает истину, если объект существовал,
      * иначе возвращает ложь.
      */
-    public boolean delete(){
-        if(this.employee == null){
+    public boolean delete(int id){
+        if (!this.employees.containsKey(id)) {
             return false;
         }
-        this.employee = null;
+
+        employees.remove(id);
         return true;
     }
 
     /*
      * Возвращает объект.
      */
-    public Employee get(){
-        return this.employee;
+    public Employee get(int id){
+        return this.employees.get(id);
+    }
+
+
+    /*
+     * Возвращает список объектов, которые хранятся в репозитории.
+     */
+    public List<Employee> findAll() {
+
+        return this.employees.values().stream().toList();
+
     }
 
     /*
-     * Обновляет объект и возвращает истину, если он существует,
+     * Обновляет объект и возвращает его, если он существует,
      * иначе возвращает ложь.
      */
-    public boolean update(Employee employee){
-        if(this.employee == null){
-            return false;
+    public Employee update(Employee employee) {
+
+        if (employee == null || !this.employees.containsKey(employee.getId())) {
+            return null;
         }
-        this.employee = employee;
-        return true;
+
+        this.employees.replace(employee.getId(), employee);
+        return get(employee.getId());
+
     }
 }

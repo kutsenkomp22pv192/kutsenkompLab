@@ -1,8 +1,10 @@
 package tech.reliab.course.kutsenkomp.bank.entity;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class User {
     private int id;
@@ -10,7 +12,7 @@ public class User {
     private Date birthDate;
     private String workAddress;
     private float monthIncome;
-    private Bank bank;
+    private List<Bank> banks = new ArrayList<>();
     private float rate;
 
     public User(int id, String fullName, Date birthDate,  String workAddress,
@@ -21,7 +23,7 @@ public class User {
         this.birthDate = birthDate;
         this.workAddress = workAddress;
         this.monthIncome = monthIncome;
-        this.bank = bank;
+        this.banks.add(bank);
         this.rate = rate;
     }
 
@@ -31,7 +33,7 @@ public class User {
         this.birthDate = user.getBirthDate();
         this.workAddress = user.getWorkAddress();
         this.monthIncome = user.getMonthIncome();
-        this.bank = user.getBank();
+        this.banks = user.getBanks();
         this.rate = user.getRate();
     }
 
@@ -44,7 +46,7 @@ public class User {
                 ", birthDate='"+ new SimpleDateFormat("yyyy-MM-dd").format(birthDate.getTime())+
                 ", workAddress=" + workAddress +
                 ", monthIncome=" + monthIncome +
-                ", bank=" + bank +
+                ", bank=" + banks +
                 ", rate=" + rate +
                 '}';
     }
@@ -81,12 +83,12 @@ public class User {
         this.workAddress = workAddress;
     }
 
-    public Bank getBank() {
-        return this.bank;
+    public List<Bank> getBanks() {
+        return this.banks;
     }
 
-    public void setBank(Bank bank) {
-        this.bank = bank;
+    public void setBanks(List<Bank> banks) {
+        this.banks = banks;
     }
 
     public float getMonthIncome() {

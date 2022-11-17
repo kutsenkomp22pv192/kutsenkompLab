@@ -2,11 +2,28 @@ package tech.reliab.course.kutsenkomp.bank.service.impl;
 
 
 import tech.reliab.course.kutsenkomp.bank.entity.CreditAccount;
+import tech.reliab.course.kutsenkomp.bank.entity.PaymentAccount;
+import tech.reliab.course.kutsenkomp.bank.repositories.BankRepository;
 import tech.reliab.course.kutsenkomp.bank.repositories.CreditAccountRepository;
 import tech.reliab.course.kutsenkomp.bank.service.CreditAccountService;
 
+import java.util.List;
+
 public class CreditAccountServiceImpl implements CreditAccountService {
-    CreditAccountRepository creditAccountRepository = new CreditAccountRepository();
+    private static CreditAccountServiceImpl INSTANCE;
+
+    private CreditAccountServiceImpl() {
+    }
+
+    public static CreditAccountServiceImpl getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new CreditAccountServiceImpl();
+        }
+
+        return INSTANCE;
+    }
+
+    private final CreditAccountRepository creditAccountRepository = CreditAccountRepository.getInstance();
 
     /*
      * Добавляет bank и возвращает добаленный объект, если до этого его не существовало
@@ -14,18 +31,15 @@ public class CreditAccountServiceImpl implements CreditAccountService {
      */
     @Override
     public CreditAccount add(CreditAccount creditAccount) {
-        if(creditAccountRepository.add(creditAccount)){
-            return creditAccountRepository.get();
-        }
-        return null;
+        return creditAccountRepository.add(creditAccount);
     }
 
     /*
      * Возвращает объект
      */
     @Override
-    public CreditAccount get() {
-        return creditAccountRepository.get();
+    public CreditAccount get(int id) {
+        return creditAccountRepository.get(id);
     }
 
     /*
@@ -33,7 +47,7 @@ public class CreditAccountServiceImpl implements CreditAccountService {
      * иначе возвращает ложь.
      */
     @Override
-    public boolean update(CreditAccount creditAccount) {
+    public CreditAccount update(CreditAccount creditAccount) {
         return creditAccountRepository.update(creditAccount);
     }
 
@@ -42,7 +56,15 @@ public class CreditAccountServiceImpl implements CreditAccountService {
      * иначе возвращает ложь.
      */
     @Override
-    public boolean delete() {
-        return creditAccountRepository.delete();
+    public boolean delete(int id) {
+        return creditAccountRepository.delete(id);
+    }
+
+    /*
+     * Возвращает лист объектов
+     */
+    @Override
+    public List<CreditAccount> getAll(){
+        return creditAccountRepository.findAll();
     }
 }

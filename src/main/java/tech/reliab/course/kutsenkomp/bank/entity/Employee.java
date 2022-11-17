@@ -16,7 +16,6 @@ public class Employee {
     public Employee(int id, String fullName, Date birthDate,
                     String position, Bank bank, boolean worksInOffice,
                     BankOffice bankOffice, boolean canGiveCredit, float monthIncome) {
-        bank.setCountEmployees(bank.getCountEmployees() + 1);
         this.id = id;
         this.fullName = fullName;
         this.birthDate = birthDate;
