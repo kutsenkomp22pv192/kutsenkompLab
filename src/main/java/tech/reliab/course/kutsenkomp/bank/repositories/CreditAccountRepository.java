@@ -5,6 +5,7 @@ import tech.reliab.course.kutsenkomp.bank.entity.BankAtm;
 import tech.reliab.course.kutsenkomp.bank.entity.CreditAccount;
 import tech.reliab.course.kutsenkomp.bank.entity.PaymentAccount;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +24,7 @@ public class CreditAccountRepository {
         return INSTANCE;
     }
 
-    private final Map<Integer, CreditAccount> creditAccounts = new LinkedHashMap<>();
+    private final ArrayList<CreditAccount> creditAccounts = new ArrayList<CreditAccount>();
 
     /*
      * Добавляет bank и возвращает добаленный объект, если до этого его не существовало
@@ -34,7 +35,7 @@ public class CreditAccountRepository {
             return null;
         }
 
-        this.creditAccounts.put(creditAccount.getId(), creditAccount);
+        this.creditAccounts.add(creditAccount);
         return creditAccount;
     }
 
@@ -43,12 +44,13 @@ public class CreditAccountRepository {
      * иначе возвращает ложь.
      */
     public boolean delete(int id){
-        if (!this.creditAccounts.containsKey(id)) {
-            return false;
+        for (CreditAccount creditAccount:creditAccounts) {
+            if (creditAccount.getId() == id) {
+                creditAccounts.remove(creditAccount);
+                return true;
+            }
         }
-
-        creditAccounts.remove(id);
-        return true;
+        return false;
     }
 
     /*
@@ -64,7 +66,7 @@ public class CreditAccountRepository {
      */
     public List<CreditAccount> findAll() {
 
-        return this.creditAccounts.values().stream().toList();
+        return this.creditAccounts.stream().toList();
 
     }
 
@@ -74,11 +76,11 @@ public class CreditAccountRepository {
      */
     public CreditAccount update(CreditAccount creditAccount) {
 
-        if (creditAccount == null || !this.creditAccounts.containsKey(creditAccount.getId())) {
+        if (creditAccount == null || !this.creditAccounts.contains(creditAccount)) {
             return null;
         }
 
-        this.creditAccounts.replace(creditAccount.getId(), creditAccount);
+        this.creditAccounts.set(this.creditAccounts.indexOf(creditAccount), creditAccount);
         return get(creditAccount.getId());
 
     }

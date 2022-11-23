@@ -2,8 +2,10 @@ package tech.reliab.course.kutsenkomp.bank.repositories;
 
 import tech.reliab.course.kutsenkomp.bank.entity.Bank;
 import tech.reliab.course.kutsenkomp.bank.entity.BankAtm;
+import tech.reliab.course.kutsenkomp.bank.entity.BankOffice;
 import tech.reliab.course.kutsenkomp.bank.entity.User;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +24,7 @@ public class BankAtmRepository {
         return INSTANCE;
     }
 
-    private final Map<Integer, BankAtm> bankAtms = new LinkedHashMap<>();
+    private final ArrayList<BankAtm> bankAtms = new ArrayList<BankAtm>();
 
     /*
      * Добавляет bank и возвращает добаленный объект, если до этого его не существовало
@@ -33,7 +35,7 @@ public class BankAtmRepository {
             return null;
         }
 
-        this.bankAtms.put(bankAtm.getId(), bankAtm);
+        this.bankAtms.add(bankAtm);
         return bankAtm;
     }
 
@@ -42,12 +44,13 @@ public class BankAtmRepository {
      * иначе возвращает ложь.
      */
     public boolean delete(int id){
-        if (!this.bankAtms.containsKey(id)) {
-            return false;
+        for (BankAtm bankAtm:bankAtms) {
+            if (bankAtm.getId() == id) {
+                bankAtms.remove(bankAtm);
+                return true;
+            }
         }
-
-        bankAtms.remove(id);
-        return true;
+        return false;
     }
     /*
      * Возвращает объект.
@@ -62,7 +65,7 @@ public class BankAtmRepository {
      */
     public List<BankAtm> findAll() {
 
-        return this.bankAtms.values().stream().toList();
+        return this.bankAtms.stream().toList();
 
     }
 
@@ -72,11 +75,11 @@ public class BankAtmRepository {
      */
     public BankAtm update(BankAtm bankAtm) {
 
-        if (bankAtm == null || !this.bankAtms.containsKey(bankAtm.getId())) {
+        if (bankAtm == null || !this.bankAtms.contains(bankAtm)) {
             return null;
         }
 
-        this.bankAtms.replace(bankAtm.getId(), bankAtm);
+        this.bankAtms.set(this.bankAtms.indexOf(bankAtm), bankAtm);
         return get(bankAtm.getId());
 
     }

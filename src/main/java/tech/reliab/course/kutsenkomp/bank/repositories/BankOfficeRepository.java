@@ -4,6 +4,7 @@ import tech.reliab.course.kutsenkomp.bank.entity.Bank;
 import tech.reliab.course.kutsenkomp.bank.entity.BankAtm;
 import tech.reliab.course.kutsenkomp.bank.entity.BankOffice;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +23,7 @@ public class BankOfficeRepository {
         return INSTANCE;
     }
 
-    private final Map<Integer, BankOffice> bankOffices = new LinkedHashMap<>();
+    private final ArrayList<BankOffice> bankOffices = new ArrayList<BankOffice>();
 
 
     /*
@@ -33,7 +34,7 @@ public class BankOfficeRepository {
         if (bankOffice == null) {
             return null;
         }
-        this.bankOffices.put(bankOffice.getId(), bankOffice);
+        this.bankOffices.add(bankOffice);
         return bankOffice;
     }
 
@@ -42,19 +43,25 @@ public class BankOfficeRepository {
      * иначе возвращает ложь.
      */
     public boolean delete(int id){
-        if (!this.bankOffices.containsKey(id)) {
-            return false;
+        for (BankOffice bankOffice:bankOffices) {
+            if (bankOffice.getId() == id) {
+                bankOffices.remove(bankOffice);
+                return true;
+            }
         }
-
-        bankOffices.remove(id);
-        return true;
+        return false;
     }
 
     /*
      * Возвращает объект.
      */
     public BankOffice get(int id){
-        return this.bankOffices.get(id);
+        for (BankOffice bankOffice:bankOffices) {
+            if (bankOffice.getId() == id) {
+                return bankOffice;
+            }
+        }
+        return null;
     }
 
     /*
@@ -62,7 +69,7 @@ public class BankOfficeRepository {
      */
     public List<BankOffice> findAll() {
 
-        return this.bankOffices.values().stream().toList();
+        return this.bankOffices.stream().toList();
 
     }
 
@@ -72,11 +79,11 @@ public class BankOfficeRepository {
      */
     public BankOffice update(BankOffice bankOffice) {
 
-        if (bankOffice == null || !this.bankOffices.containsKey(bankOffice.getId())) {
+        if (bankOffice == null || !this.bankOffices.contains(bankOffice)) {
             return null;
         }
 
-        this.bankOffices.replace(bankOffice.getId(), bankOffice);
+        this.bankOffices.set(this.bankOffices.indexOf(bankOffice), bankOffice);
         return get(bankOffice.getId());
 
     }

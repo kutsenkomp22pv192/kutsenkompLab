@@ -5,6 +5,7 @@ import tech.reliab.course.kutsenkomp.bank.entity.BankAtm;
 import tech.reliab.course.kutsenkomp.bank.entity.CreditAccount;
 import tech.reliab.course.kutsenkomp.bank.entity.Employee;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +24,7 @@ public class EmployeeRepository {
         return INSTANCE;
     }
 
-    private final Map<Integer, Employee> employees = new LinkedHashMap<>();
+    private final ArrayList<Employee> employees = new ArrayList<Employee>();
 
     /*
      * Добавляет bank и возвращает добаленный объект, если до этого его не существовало
@@ -34,7 +35,7 @@ public class EmployeeRepository {
             return null;
         }
 
-        this.employees.put(employee.getId(), employee);
+        this.employees.add(employee);
         return employee;
     }
 
@@ -43,12 +44,13 @@ public class EmployeeRepository {
      * иначе возвращает ложь.
      */
     public boolean delete(int id){
-        if (!this.employees.containsKey(id)) {
-            return false;
+        for (Employee employee:employees) {
+            if (employee.getId() == id) {
+                employees.remove(employee);
+                return true;
+            }
         }
-
-        employees.remove(id);
-        return true;
+        return false;
     }
 
     /*
@@ -64,7 +66,7 @@ public class EmployeeRepository {
      */
     public List<Employee> findAll() {
 
-        return this.employees.values().stream().toList();
+        return this.employees.stream().toList();
 
     }
 
@@ -74,11 +76,11 @@ public class EmployeeRepository {
      */
     public Employee update(Employee employee) {
 
-        if (employee == null || !this.employees.containsKey(employee.getId())) {
+        if (employee == null || !this.employees.contains(employee)) {
             return null;
         }
 
-        this.employees.replace(employee.getId(), employee);
+        this.employees.set(this.employees.indexOf(employee), employee);
         return get(employee.getId());
 
     }

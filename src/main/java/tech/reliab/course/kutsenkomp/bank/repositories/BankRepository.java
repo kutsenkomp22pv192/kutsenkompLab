@@ -4,6 +4,7 @@ import tech.reliab.course.kutsenkomp.bank.entity.Bank;
 import tech.reliab.course.kutsenkomp.bank.entity.BankAtm;
 import tech.reliab.course.kutsenkomp.bank.entity.BankOffice;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +24,7 @@ public class BankRepository {
         return INSTANCE;
     }
 
-    private final Map<Integer, Bank> banks = new LinkedHashMap<>();
+    private final ArrayList<Bank> banks = new ArrayList<Bank>();
 
 
     /*
@@ -34,7 +35,7 @@ public class BankRepository {
             return null;
         }
 
-        this.banks.put(bank.getId(), bank);
+        this.banks.add(bank);
         return bank;
     }
 
@@ -43,12 +44,13 @@ public class BankRepository {
      * иначе возвращает ложь.
      */
     public boolean delete(int id){
-        if (!this.banks.containsKey(id)) {
-            return false;
+        for (Bank bank:banks) {
+            if (bank.getId() == id) {
+                banks.remove(bank);
+                return true;
+            }
         }
-
-        banks.remove(id);
-        return true;
+        return false;
     }
 
     /*
@@ -64,7 +66,7 @@ public class BankRepository {
      */
     public List<Bank> findAll() {
 
-        return this.banks.values().stream().toList();
+        return this.banks.stream().toList();
 
     }
 
@@ -74,11 +76,11 @@ public class BankRepository {
      */
     public Bank update(Bank bank) {
 
-        if (bank == null || !this.banks.containsKey(bank.getId())) {
+        if (bank == null || !this.banks.contains(bank)) {
             return null;
         }
 
-        this.banks.replace(bank.getId(), bank);
+        this.banks.set(this.banks.indexOf(bank), bank);
         return get(bank.getId());
 
     }

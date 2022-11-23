@@ -1,10 +1,8 @@
 package tech.reliab.course.kutsenkomp.bank.repositories;
 
-import tech.reliab.course.kutsenkomp.bank.entity.Bank;
-import tech.reliab.course.kutsenkomp.bank.entity.BankAtm;
-import tech.reliab.course.kutsenkomp.bank.entity.Employee;
-import tech.reliab.course.kutsenkomp.bank.entity.User;
+import tech.reliab.course.kutsenkomp.bank.entity.*;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +21,7 @@ public class UserRepository {
         return INSTANCE;
     }
 
-    private final Map<Integer, User> users = new LinkedHashMap<>();
+    private final ArrayList<User> users = new ArrayList<User>();
 
     /*
      * Добавляет bank и возвращает добаленный объект, если до этого его не существовало
@@ -34,7 +32,7 @@ public class UserRepository {
             return null;
         }
 
-        this.users.put(user.getId(), user);
+        this.users.add(user);
         return user;
     }
 
@@ -43,12 +41,13 @@ public class UserRepository {
      * иначе возвращает ложь.
      */
     public boolean delete(int id){
-        if (!this.users.containsKey(id)) {
-            return false;
+        for (User user:users) {
+            if (user.getId() == id) {
+                users.remove(user);
+                return true;
+            }
         }
-
-        users.remove(id);
-        return true;
+        return false;
     }
 
     /*
@@ -63,7 +62,7 @@ public class UserRepository {
      */
     public List<User> findAll() {
 
-        return this.users.values().stream().toList();
+        return this.users.stream().toList().stream().toList();
 
     }
 
@@ -73,11 +72,10 @@ public class UserRepository {
      */
     public User update(User user) {
 
-        if (user == null || !this.users.containsKey(user.getId())) {
+        if (user == null || !this.users.contains(user)) {
             return null;
         }
-
-        this.users.replace(user.getId(), user);
+        this.users.set(this.users.indexOf(user), user);
         return get(user.getId());
 
     }

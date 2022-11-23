@@ -1,9 +1,8 @@
 package tech.reliab.course.kutsenkomp.bank.repositories;
 
-import tech.reliab.course.kutsenkomp.bank.entity.BankAtm;
-import tech.reliab.course.kutsenkomp.bank.entity.CreditAccount;
-import tech.reliab.course.kutsenkomp.bank.entity.PaymentAccount;
+import tech.reliab.course.kutsenkomp.bank.entity.*;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +21,7 @@ public class PaymentAccountRepository {
         return INSTANCE;
     }
 
-    private final Map<Integer, PaymentAccount> paymentAccounts = new LinkedHashMap<>();
+    private final ArrayList<PaymentAccount> paymentAccounts = new ArrayList<PaymentAccount>();
 
     /*
      * Добавляет bank и возвращает добаленный объект, если до этого его не существовало
@@ -33,7 +32,7 @@ public class PaymentAccountRepository {
             return null;
         }
 
-        this.paymentAccounts.put(paymentAccount.getId(), paymentAccount);
+        this.paymentAccounts.add(paymentAccount);
         return paymentAccount;
     }
 
@@ -42,12 +41,13 @@ public class PaymentAccountRepository {
      * иначе возвращает ложь.
      */
     public boolean delete(int id){
-        if (!this.paymentAccounts.containsKey(id)) {
-            return false;
+        for (PaymentAccount paymentAccount:paymentAccounts) {
+            if (paymentAccount.getId() == id) {
+                paymentAccounts.remove(paymentAccount);
+                return true;
+            }
         }
-
-        paymentAccounts.remove(id);
-        return true;
+        return false;
     }
 
     /*
@@ -62,7 +62,7 @@ public class PaymentAccountRepository {
      */
     public List<PaymentAccount> findAll() {
 
-        return this.paymentAccounts.values().stream().toList();
+        return this.paymentAccounts.stream().toList();
 
     }
 
@@ -72,11 +72,11 @@ public class PaymentAccountRepository {
      */
     public PaymentAccount update(PaymentAccount paymentAccount) {
 
-        if (paymentAccount == null || !this.paymentAccounts.containsKey(paymentAccount.getId())) {
+        if (paymentAccount == null || !this.paymentAccounts.contains(paymentAccount)) {
             return null;
         }
 
-        this.paymentAccounts.replace(paymentAccount.getId(), paymentAccount);
+        this.paymentAccounts.set(this.paymentAccounts.indexOf(paymentAccount), paymentAccount);
         return get(paymentAccount.getId());
 
     }
