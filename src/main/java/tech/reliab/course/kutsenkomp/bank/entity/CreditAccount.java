@@ -19,7 +19,7 @@ public class CreditAccount  {
     private PaymentAccount paymentAccount;
 
     public CreditAccount(int id, User user, String bankName, float money,
-                         Date dataStart, int countMonth, float monthPayment,
+                         Date dataStart, int countMonth,
                          float interestRate, Employee employee, PaymentAccount paymentAccount) {
         this.id = id;
         this.user = user;
@@ -31,7 +31,7 @@ public class CreditAccount  {
         c.add(Calendar.MONTH, countMonth);
         this.dataEnd = c.getTime();
         this.countMonth = countMonth;
-        this.monthPayment = monthPayment;
+        this.monthPayment = (money + money * interestRate)/countMonth;
         this.interestRate = interestRate;
         this.employee = employee;
         this.paymentAccount = paymentAccount;

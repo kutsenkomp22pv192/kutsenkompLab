@@ -75,5 +75,12 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeRepository.findAll();
     }
 
+    @Override
+    public List<Employee> getAllEmployeeByBankOfficeId(int idBankOffice) {
+        return employeeRepository.findAll().stream()
+                .filter(employee -> employee.getBankOffice().getId() == idBankOffice)
+                .toList();
+    }
+
 
 }

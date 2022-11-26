@@ -12,7 +12,7 @@ public class Bank {
     private float money;
     private float interestRate;
 
-    public Bank(int id, String name, int countOffices, int countAtm, int countEmployees, int countClients, int rate, float money, float interestRate) {
+    public Bank(int id, String name, int countOffices, int countAtm, int countEmployees, int countClients, int rate, float money) {
         this.id = id;
         this.name = name;
         this.countOffices = countOffices;
@@ -21,7 +21,7 @@ public class Bank {
         this.countClients = countClients;
         this.rate = rate;
         this.money = money;
-        this.interestRate = interestRate;
+        this.interestRate = (100 - rate) / 5;
     }
 
     public Bank(Bank bank) {

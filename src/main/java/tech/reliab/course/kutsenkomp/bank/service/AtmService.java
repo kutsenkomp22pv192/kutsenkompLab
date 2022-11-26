@@ -11,6 +11,7 @@ public interface AtmService {
     public BankAtm add(BankAtm bankAtm);
     public BankAtm get(int id);
     public boolean delete(int id);
-    public BankAtm update(BankAtm bankAtm);
+    public BankAtm update(int idBankAtm, BankAtm bankAtm);
     List<BankAtm> getAll();
+    List<BankAtm> getAllAtmByBankOfficeId(int idBankAtm);
 }

@@ -16,7 +16,7 @@ public class User {
     private float rate;
 
     public User(int id, String fullName, Date birthDate,  String workAddress,
-                float monthIncome, Bank bank, float rate) {
+                float monthIncome, Bank bank) {
         bank.setCountClients(bank.getCountClients() + 1);
         this.id = id;
         this.fullName = fullName;
@@ -24,7 +24,7 @@ public class User {
         this.workAddress = workAddress;
         this.monthIncome = monthIncome;
         this.banks.add(bank);
-        this.rate = rate;
+        this.rate = monthIncome/10;
     }
 
     public User(User user) {

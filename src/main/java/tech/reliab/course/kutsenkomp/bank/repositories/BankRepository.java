@@ -1,8 +1,10 @@
 package tech.reliab.course.kutsenkomp.bank.repositories;
 
+import tech.reliab.course.kutsenkomp.bank.comparators.BankComparator;
 import tech.reliab.course.kutsenkomp.bank.entity.Bank;
 import tech.reliab.course.kutsenkomp.bank.entity.BankAtm;
 import tech.reliab.course.kutsenkomp.bank.entity.BankOffice;
+import tech.reliab.course.kutsenkomp.bank.service.impl.BankOfficeServiceImpl;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -74,13 +76,8 @@ public class BankRepository {
      * Обновляет объект и возвращает его, если он существует,
      * иначе возвращает ложь.
      */
-    public Bank update(Bank bank) {
-
-        if (bank == null || !this.banks.contains(bank)) {
-            return null;
-        }
-
-        this.banks.set(this.banks.indexOf(bank), bank);
+    public Bank update(int idBank, Bank bank) {
+        this.banks.set(idBank, bank);
         return get(bank.getId());
 
     }

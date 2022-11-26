@@ -57,8 +57,8 @@ public class AtmServiceImpl implements AtmService {
      * иначе возвращает ложь.
      */
     @Override
-    public BankAtm update(BankAtm bankAtm) {
-        return bankAtmRepository.update(bankAtm);
+    public BankAtm update(int idBankAtm,BankAtm bankAtm) {
+        return bankAtmRepository.update(idBankAtm,bankAtm);
     }
 
     /*
@@ -76,5 +76,12 @@ public class AtmServiceImpl implements AtmService {
     @Override
     public List<BankAtm> getAll(){
         return bankAtmRepository.findAll();
+    }
+
+    @Override
+    public List<BankAtm> getAllAtmByBankOfficeId(int idBankOffice) {
+        return bankAtmRepository.findAll().stream()
+                .filter(atm -> atm.getBankOffice().getId() == idBankOffice)
+                .toList();
     }
 }

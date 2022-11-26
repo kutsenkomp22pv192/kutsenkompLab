@@ -66,4 +66,12 @@ public class PaymentAccountServiceImpl implements PaymentAccountService {
     public List<PaymentAccount> getAll(){
         return paymentAccountRepository.findAll();
     }
+
+    @Override
+    public List<PaymentAccount> getAllPaymentAccountByUserId(int userId) {
+        return paymentAccountRepository.findAll().stream()
+                .filter(paymentAccount -> paymentAccount.getUser().getId() == userId)
+                .toList();
+    }
+
 }

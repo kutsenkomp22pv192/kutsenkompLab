@@ -1,6 +1,7 @@
 package tech.reliab.course.kutsenkomp.bank.service;
 
 import tech.reliab.course.kutsenkomp.bank.entity.PaymentAccount;
+import tech.reliab.course.kutsenkomp.bank.entity.User;
 
 import java.util.List;
 
@@ -10,4 +11,5 @@ public interface PaymentAccountService {
     public PaymentAccount update(PaymentAccount paymentAccount);
     public boolean delete(int id);
     List<PaymentAccount> getAll();
+    List<PaymentAccount> getAllPaymentAccountByUserId(int userId);
 }

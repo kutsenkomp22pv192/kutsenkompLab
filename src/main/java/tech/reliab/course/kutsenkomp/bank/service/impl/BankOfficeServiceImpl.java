@@ -1,12 +1,14 @@
 package tech.reliab.course.kutsenkomp.bank.service.impl;
 
+import tech.reliab.course.kutsenkomp.bank.entity.Bank;
 import tech.reliab.course.kutsenkomp.bank.entity.BankAtm;
 import tech.reliab.course.kutsenkomp.bank.entity.BankOffice;
-import tech.reliab.course.kutsenkomp.bank.entity.Employee;
 import tech.reliab.course.kutsenkomp.bank.repositories.BankOfficeRepository;
 import tech.reliab.course.kutsenkomp.bank.service.BankOfficeService;
 import tech.reliab.course.kutsenkomp.bank.service.BankService;
 
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.List;
 
 public class BankOfficeServiceImpl implements BankOfficeService {
@@ -40,7 +42,7 @@ public class BankOfficeServiceImpl implements BankOfficeService {
         if (bank != null) {
             bank.setMoney(bank.getMoney() + bankOffice.getMoney());
             bank.setCountOffices(bank.getCountOffices() + 1);
-            bankService.update(bank);
+            bankService.update(bank.getId(),bank);
         }
 
         return newBankOffice;
@@ -91,7 +93,7 @@ public class BankOfficeServiceImpl implements BankOfficeService {
 
         if (bank != null) {
             bank.setCountEmployees(bank.getCountEmployees() + 1);
-            bankService.update(bank);
+            bankService.update(bank.getId(),bank);
             return true;
         }
 
@@ -111,13 +113,20 @@ public class BankOfficeServiceImpl implements BankOfficeService {
             bank.setMoney(bank.getMoney() + bankAtm.getMoney());
 
             bank.setCountAtm(bank.getCountAtm() + 1);
-            bankService.update(bank);
+            bankService.update(bank.getId(),bank);
             bankOffice.setCountAtm(bankOffice.getCountAtm() + 1);
             bankOfficeRepository.update(bankOffice);
             return true;
         }
 
         return false;
+    }
+
+    @Override
+    public List<BankOffice> getAllBankOfficesByBankId(int idBank) {
+        return bankOfficeRepository.findAll().stream()
+                .filter(bankOffice -> bankOffice.getBank().getId() == idBank)
+                .toList();
     }
 
 }

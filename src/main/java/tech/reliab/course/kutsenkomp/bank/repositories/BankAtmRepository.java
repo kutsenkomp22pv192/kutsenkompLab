@@ -73,13 +73,8 @@ public class BankAtmRepository {
      * Обновляет объект и возвращает его, если он существует,
      * иначе возвращает ложь.
      */
-    public BankAtm update(BankAtm bankAtm) {
-
-        if (bankAtm == null || !this.bankAtms.contains(bankAtm)) {
-            return null;
-        }
-
-        this.bankAtms.set(this.bankAtms.indexOf(bankAtm), bankAtm);
+    public BankAtm update(int idBankAtm, BankAtm bankAtm) {
+        this.bankAtms.set(idBankAtm, bankAtm);
         return get(bankAtm.getId());
 
     }

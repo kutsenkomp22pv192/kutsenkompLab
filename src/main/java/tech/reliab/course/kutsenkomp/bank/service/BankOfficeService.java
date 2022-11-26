@@ -1,10 +1,10 @@
 package tech.reliab.course.kutsenkomp.bank.service;
 
-import tech.reliab.course.kutsenkomp.bank.entity.Bank;
 import tech.reliab.course.kutsenkomp.bank.entity.BankAtm;
 import tech.reliab.course.kutsenkomp.bank.entity.BankOffice;
-import tech.reliab.course.kutsenkomp.bank.entity.Employee;
+import tech.reliab.course.kutsenkomp.bank.repositories.BankOfficeRepository;
 
+import java.io.OutputStream;
 import java.util.List;
 
 public interface BankOfficeService {
@@ -15,4 +15,5 @@ public interface BankOfficeService {
     List<BankOffice> getAll();
     boolean addEmployee(int bankOfficeId);
     boolean addAtm(int bankOfficeId, BankAtm bankAtm);
+    List<BankOffice> getAllBankOfficesByBankId(int idBank);
 }

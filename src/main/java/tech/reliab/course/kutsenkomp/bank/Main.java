@@ -3,14 +3,21 @@ package tech.reliab.course.kutsenkomp.bank;
 import tech.reliab.course.kutsenkomp.bank.entity.*;
 import tech.reliab.course.kutsenkomp.bank.service.*;
 import tech.reliab.course.kutsenkomp.bank.service.impl.*;
+import tech.reliab.course.kutsenkomp.bank.exceptions.*;
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Random;
+import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) throws ParseException {
+    private static final Random RANDOM = new Random();
+    private static final Scanner input = new Scanner(System.in);
+
+    public static void main(String[] args) throws ParseException, CloneNotSupportedException {
         BankService bankService = BankServiceImpl.getInstance();
         AtmService atmService = AtmServiceImpl.getInstance();
         BankOfficeService bankOfficeService = BankOfficeServiceImpl.getInstance();
@@ -29,40 +36,39 @@ public class Main {
 
         for (int i = 0; i < banksNumber; i++) {
             int idBank = i;
-            var bank = bankService.add(new Bank(idBank, "Bank_" + idBank, 0, 0, 0, 0,1, 0, 1 ));
+            var bank = bankService.add(new Bank(idBank, "Bank_" + idBank, 0, 0, 0, 0,RANDOM.nextInt(100), 0));
             Employee employeeForAccount = null;
             for (int j = 0; j < officesNumber; j++) {
                 int idBankOffice = i * officesNumber + j;
-                var bankOffice = bankOfficeService.add(new BankOffice(bank, idBankOffice, "Office_" + idBankOffice, "Address_" + idBankOffice,"Working", true,  true,true, 0, true, 1, 1));
+                var bankOffice = bankOfficeService.add(new BankOffice(bank, idBankOffice, "Office_" + idBankOffice, "Address_" + idBankOffice,"Working", true,  true,true, 0, true, RANDOM.nextInt(100000), RANDOM.nextInt(1000)));
                 Employee employee = null;
                 for (int k = 0; k < employeeNumber; k++) {
                     int idEmployee = i * officesNumber * employeeNumber + j * employeeNumber + k;
-                    employee = employeeService.add(new Employee(idEmployee, "FullName_" + idEmployee, sdf.parse("1988-02-" + idEmployee), "Pos_" + idEmployee, bank, true, bankOffice, true, 1));
+                    employee = employeeService.add(new Employee(idEmployee, "FullName_" + idEmployee, sdf.parse("1988-02-" + idEmployee), "Pos_" + idEmployee, bank, true, bankOffice, true, RANDOM.nextInt(10000)));
                     if (employeeForAccount == null) {
                         employeeForAccount = employee;
                     }
                 }
-                atmService.add(new BankAtm(idBankOffice, "Atm_" + idBankOffice, "Address_" + idBankOffice, "Working", bank, bankOffice, employee, true,  true,1, 1));
+                atmService.add(new BankAtm(idBankOffice, "Atm_" + idBankOffice, "Address_" + idBankOffice, "Working", bank, bankOffice, employee, true,  true,RANDOM.nextInt(100000), RANDOM.nextInt(1000)));
             }
             for (int j = 0; j < usersNumber; j++) {
                 int idUser = i * usersNumber + j;
-                var user = userService.add(new User(idUser, "fullName_" + idUser, sdf.parse("1999-01-" + idUser),  "Address_" + idUser, 1, bank, 1));
+                var user = userService.add(new User(idUser, "fullName_" + idUser, sdf.parse("1999-01-" + idUser),  "Address_" + idUser, RANDOM.nextInt(100000), bank));
                 for (int k = 0; k < accountsNumber; k++) {
                     int idAccount = i * usersNumber * accountsNumber + j * accountsNumber + k;
-                    var paymentAccount = paymentAccountService.add(new PaymentAccount(idAccount, user, "Bank_" + i, 1));
-                    var creditAccount = creditAccountService.add(new CreditAccount(idAccount, user, "Bank_" + i, 1, new Date(), 1, 1, 1, employeeForAccount, paymentAccount));
+                    var paymentAccount = paymentAccountService.add(new PaymentAccount(idAccount, user, "Bank_" + i, RANDOM.nextInt(1000000)));
+//                    var creditAccount = creditAccountService.add(new CreditAccount(idAccount, user, "Bank_" + i, RANDOM.nextInt(1000), new Date(), 1, bank.getInterestRate(), employeeForAccount, paymentAccount));
                 }
             }
         }
 
-        for (int i = 0; i < banksNumber; i++){
-            bankService.outputBankInfo(bankService.getAll().get(i).getId(), System.out);
-        }
 
-        System.out.println("\n---------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
-
-        for (int i = 0; i < banksNumber * usersNumber; i++){
-            userService.outputUserAccounts(userService.getAll().get(i).getId(), System.out);
+        var userId = userService.getAll().get(0).getId();
+        try {
+            var creditId = bankService.issueCredit(userId, 100, System.out, 12);
+            System.out.println("Congratulations on getting a credit!");
+        }catch (Exception exception){
+            System.out.println("There are no suitable credit terms :( \n Try other data.");
         }
 
     }
