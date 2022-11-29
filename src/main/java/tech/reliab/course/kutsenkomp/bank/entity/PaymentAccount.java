@@ -28,7 +28,7 @@ public class PaymentAccount {
                 ", user=" + user +
                 ", bankName='" + bankName + '\'' +
                 ", money=" + money +
-                '}';
+                '}' ;
     }
 
     public int getId() {

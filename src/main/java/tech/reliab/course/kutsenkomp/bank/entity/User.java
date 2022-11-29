@@ -12,7 +12,7 @@ public class User {
     private Date birthDate;
     private String workAddress;
     private float monthIncome;
-    private List<Bank> banks = new ArrayList<>();
+    private ArrayList<Bank> banks = new ArrayList<>();
     private float rate;
 
     public User(int id, String fullName, Date birthDate,  String workAddress,
@@ -43,7 +43,7 @@ public class User {
         return "User{" +
                 "id=" + id +
                 ", fullName='" + fullName + '\'' +
-                ", birthDate='"+ new SimpleDateFormat("yyyy-MM-dd").format(birthDate.getTime())+
+                ", birthDate='"+ new SimpleDateFormat("yyyy-MM-dd").format(birthDate.getTime())+ '\''+
                 ", workAddress=" + workAddress +
                 ", monthIncome=" + monthIncome +
                 ", bank=" + banks +
@@ -83,11 +83,11 @@ public class User {
         this.workAddress = workAddress;
     }
 
-    public List<Bank> getBanks() {
+    public ArrayList<Bank> getBanks() {
         return this.banks;
     }
 
-    public void setBanks(List<Bank> banks) {
+    public void setBanks(ArrayList<Bank> banks) {
         this.banks = banks;
     }
 

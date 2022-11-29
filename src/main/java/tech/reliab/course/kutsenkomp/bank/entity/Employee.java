@@ -44,7 +44,7 @@ public class Employee {
         return "Employee{" +
                 "id=" + id +
                 ", fullName='" + fullName + '\'' +
-                ", birthDate=" + new SimpleDateFormat("yyyy-MM-dd").format(birthDate.getTime()) +
+                ", birthDate='" + new SimpleDateFormat("yyyy-MM-dd").format(birthDate.getTime()) + '\''+
                 ", position='" + position + '\'' +
                 ", bank=" + bank +
                 ", bankOffice=" + bankOffice +

@@ -56,10 +56,10 @@ public class CreditAccount  {
         return "CreditAccount{" +
                 "id=" + id +
                 ", user=" + user +
-                ", bankName='" + bankName + '\'' +
+                ", bankName=" + bankName + '\'' +
                 ", money=" + money +
-                ", dataStart=" + new SimpleDateFormat("yyyy-MM-dd").format(dataStart.getTime()) +
-                ", dataEnd=" + new SimpleDateFormat("yyyy-MM-dd").format(dataEnd.getTime()) +
+                ", dataStart='" + new SimpleDateFormat("yyyy-MM-dd").format(dataStart.getTime()) + '\''+
+                ", dataEnd='" + new SimpleDateFormat("yyyy-MM-dd").format(dataEnd.getTime()) + '\''+
                 ", countMonth=" + countMonth +
                 ", monthPayment=" + monthPayment +
                 ", interestRate=" + interestRate +

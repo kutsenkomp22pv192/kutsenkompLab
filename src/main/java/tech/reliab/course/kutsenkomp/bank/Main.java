@@ -5,6 +5,7 @@ import tech.reliab.course.kutsenkomp.bank.service.*;
 import tech.reliab.course.kutsenkomp.bank.service.impl.*;
 import tech.reliab.course.kutsenkomp.bank.exceptions.*;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -57,19 +58,29 @@ public class Main {
                 for (int k = 0; k < accountsNumber; k++) {
                     int idAccount = i * usersNumber * accountsNumber + j * accountsNumber + k;
                     var paymentAccount = paymentAccountService.add(new PaymentAccount(idAccount, user, "Bank_" + i, RANDOM.nextInt(1000000)));
-//                    var creditAccount = creditAccountService.add(new CreditAccount(idAccount, user, "Bank_" + i, RANDOM.nextInt(1000), new Date(), 1, bank.getInterestRate(), employeeForAccount, paymentAccount));
+                    var creditAccount = creditAccountService.add(new CreditAccount(idAccount, user, "Bank_" + i, RANDOM.nextInt(1000), new Date(), 1, bank.getInterestRate(), employeeForAccount, paymentAccount));
                 }
             }
         }
 
 
-        var userId = userService.getAll().get(0).getId();
-        try {
-            var creditId = bankService.issueCredit(userId, 100, System.out, 12);
-            System.out.println("Congratulations on getting a credit!");
-        }catch (Exception exception){
-            System.out.println("There are no suitable credit terms :( \n Try other data.");
-        }
 
+        try {
+            userService.saveToFile("file.txt", bankService.getAll().get(0), userService.getAll().get(0));
+
+            System.out.println("User before update:");
+            userService.outputUserAccounts(userService.getAll().get(0).getId(), System.out);
+
+
+            //В файле обозначен перенос двух счетов из банка 0 в банк 1 и в банк 2
+            userService.updateFromFile("file2.txt", userService.getAll().get(0));
+
+            System.out.println("\nUser after update:");
+            userService.outputUserAccounts(userService.getAll().get(0).getId(), System.out);
+
+        } catch (IOException e) {
+            System.out.println("Ошибка файла: " + e);
+        }
     }
+
 }
