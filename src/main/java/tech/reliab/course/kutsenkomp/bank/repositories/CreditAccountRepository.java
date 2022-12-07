@@ -76,11 +76,16 @@ public class CreditAccountRepository {
      */
     public CreditAccount update(CreditAccount creditAccount) {
 
-        if (creditAccount == null || !this.creditAccounts.contains(creditAccount)) {
+        if (creditAccount == null || this.creditAccounts.get(creditAccount.getId()) == null) {
             return null;
         }
 
-        this.creditAccounts.set(this.creditAccounts.indexOf(creditAccount), creditAccount);
+
+        for (CreditAccount creditAcc:creditAccounts) {
+            if (creditAcc.getId() == creditAccount.getId()) {
+                this.creditAccounts.set(this.creditAccounts.indexOf(creditAcc), creditAccount);
+            }
+        }
         return get(creditAccount.getId());
 
     }

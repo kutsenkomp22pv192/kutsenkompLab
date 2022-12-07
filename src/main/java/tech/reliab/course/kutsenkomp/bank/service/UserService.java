@@ -17,6 +17,8 @@ public interface UserService {
     List<User> getAll();
     void outputUserAccounts(int userId, OutputStream outputStream);
 
-    void saveToFile(String fileName, Bank bank, User user) throws IOException;
-    void updateFromFile(String fileName, User user) throws IOException;
+    void saveToFilePaymentAccounts(String fileName, Bank bank, User user) throws IOException;
+    void saveToFileCreditAccounts(String fileName, Bank bank, User user) throws IOException;
+    void transferPaymentAccounts(String fileName, User user) throws IOException;
+    void transferCreditAccounts(String fileName, User user) throws IOException;
 }

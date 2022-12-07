@@ -72,11 +72,17 @@ public class PaymentAccountRepository {
      */
     public PaymentAccount update(PaymentAccount paymentAccount) {
 
-        if (paymentAccount == null || !this.paymentAccounts.contains(paymentAccount)) {
+        if (paymentAccount == null || this.paymentAccounts.get(paymentAccount.getId()) == null) {
             return null;
         }
 
-        this.paymentAccounts.set(this.paymentAccounts.indexOf(paymentAccount), paymentAccount);
+
+        for (PaymentAccount paymentAcc:paymentAccounts) {
+            if (paymentAcc.getId() == paymentAccount.getId()) {
+                this.paymentAccounts.set(this.paymentAccounts.indexOf(paymentAcc), paymentAccount);
+            }
+        }
+
         return get(paymentAccount.getId());
 
     }
