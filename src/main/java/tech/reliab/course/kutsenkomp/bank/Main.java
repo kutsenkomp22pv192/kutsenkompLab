@@ -63,7 +63,7 @@ public class Main {
         }
 
 
-        var userId = userService.getAll().get(0).getId();
+
         try {
             var creditId = bankService.issueCredit(System.out);
             System.out.println("Congratulations on getting a credit!");
