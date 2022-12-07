@@ -20,11 +20,12 @@ public interface BankService {
     public boolean delete(int id);
     List<Bank> getAll();
     void outputBankInfo(int bankId, OutputStream outputStream);
-    int issueCredit(int userId, float creditSum, OutputStream outputStream, int countMonth) throws LendingTermsException;
+    int issueCredit(OutputStream outputStream) throws LendingTermsException;
     int choseBankForCredit(PrintStream printStream, Scanner input, int userId) throws LendingTermsException;
     int choseBankOfficeForCredit(int idBank, PrintStream printStream, Scanner input, float creditSum) throws LendingTermsException;
     int choseEmployeeForCredit(int idOffice, PrintStream printStream, Scanner input) throws LendingTermsException;
     int choseBankAtmForCredit(int idOffice, PrintStream printStream, Scanner input, float creditSum) throws LendingTermsException;
     int applyCredit(PrintStream printStream, Scanner input, int userId, int idBank, int idEmployee,int idAtm, float creditSum, int countMonth) throws LendingTermsException;
+    int choseUserForCredit(PrintStream printStream, Scanner input) throws LendingTermsException;
 
 }

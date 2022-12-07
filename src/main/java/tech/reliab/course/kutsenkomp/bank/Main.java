@@ -65,7 +65,7 @@ public class Main {
 
         var userId = userService.getAll().get(0).getId();
         try {
-            var creditId = bankService.issueCredit(userId, 100, System.out, 12);
+            var creditId = bankService.issueCredit(System.out);
             System.out.println("Congratulations on getting a credit!");
         }catch (Exception exception){
             System.out.println("There are no suitable credit terms :( \n Try other data.");

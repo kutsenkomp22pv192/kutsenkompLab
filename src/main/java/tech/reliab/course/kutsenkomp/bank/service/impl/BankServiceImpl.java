@@ -146,7 +146,18 @@ public class BankServiceImpl implements BankService {
      * Выдача кредита
      */
     @Override
-    public int issueCredit(int userId, float creditSum, OutputStream outputStream, int countMonth) throws LendingTermsException {
+    public int issueCredit(OutputStream outputStream) throws LendingTermsException {
+        PrintStream printStream = new PrintStream(outputStream);
+        Scanner input = new Scanner(System.in);
+
+        int userId = choseUserForCredit(printStream, input);
+
+        System.out.print("Input credit sum: ");
+        int creditSum = input.nextInt();
+
+        System.out.print("Input count Month: ");
+        int countMonth = input.nextInt();
+
         if(creditSum <=  0){
             throw new NegativeSumException();
         }
@@ -154,8 +165,6 @@ public class BankServiceImpl implements BankService {
             throw new ZeroMonthException();
         }
 
-        PrintStream printStream = new PrintStream(outputStream);
-        Scanner input = new Scanner(System.in);
 
         int choseBankID = choseBankForCredit(printStream, input, userId);
 
@@ -322,6 +331,31 @@ public class BankServiceImpl implements BankService {
         System.out.print("Credit account successfully created! Your credit account: \n");
         printStream.printf("CreditAccount id %s, Month Payment %s\n", CreditAccountServiceImpl.getInstance().get(creditAccountId).getId(),CreditAccountServiceImpl.getInstance().get(creditAccountId).getMonthPayment());
         return CreditAccountServiceImpl.getInstance().get(creditAccountId).getId();
+    }
+
+    @Override
+    public int choseUserForCredit(PrintStream printStream, Scanner input) throws LendingTermsException {
+        var users = UserServiceImpl.getInstance().getAll();
+
+
+        ArrayList<Integer> ids = new ArrayList<Integer>();
+        System.out.println("Enter the user Id.");
+        for (int i = 0; i < users.size(); i++){
+            printStream.printf("Bank id %s, Bank name %s\n", users.get(i).getId(), users.get(i).getFullName());
+            ids.add(users.get(i).getId());
+        }
+
+        if (ids.isEmpty())
+            throw new LendingTermsException();
+
+        System.out.print("Input id: ");
+        int userID = input.nextInt();
+
+        if (!ids.contains(userID))
+            throw new UserInputException();
+
+
+        return userID;
     }
 }
 
