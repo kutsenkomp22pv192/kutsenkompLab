@@ -128,10 +128,11 @@ public class UserServiceImpl implements UserService {
                 .filter(paymentAccount -> paymentAccount.getUser().getId() == user.getId() && paymentAccount.getBankName().compareTo(bank.getName()) == 0)
                 .toList();
 
-        JsonWriter writer = new JsonWriter(new FileWriter(fileName));
-        gson.toJson(paymentAccounts, new TypeToken<ArrayList<PaymentAccount>>() {}.getType(), writer);
+        try (JsonWriter writer = new JsonWriter(new FileWriter(fileName))) {
+            gson.toJson(paymentAccounts, new TypeToken<ArrayList<PaymentAccount>>() {}.getType(), writer);
+        }
 
-        writer.close();
+
     }
 
     @Override
@@ -141,10 +142,10 @@ public class UserServiceImpl implements UserService {
                 .filter(creditAccount -> creditAccount.getUser().getId() == user.getId() && creditAccount.getBankName().compareTo(bank.getName()) == 0)
                 .toList();
 
-        JsonWriter writer = new JsonWriter(new FileWriter(fileName));
-        gson.toJson(creditAccounts, new TypeToken<ArrayList<PaymentAccount>>() {}.getType(), writer);
+        try (JsonWriter writer = new JsonWriter(new FileWriter(fileName));) {
+            gson.toJson(creditAccounts, new TypeToken<ArrayList<PaymentAccount>>() {}.getType(), writer);
+        }
 
-        writer.close();
     }
 
     @Override
