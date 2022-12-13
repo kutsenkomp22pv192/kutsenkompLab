@@ -142,7 +142,7 @@ public class UserServiceImpl implements UserService {
                 .filter(creditAccount -> creditAccount.getUser().getId() == user.getId() && creditAccount.getBankName().compareTo(bank.getName()) == 0)
                 .toList();
 
-        try (JsonWriter writer = new JsonWriter(new FileWriter(fileName));) {
+        try (JsonWriter writer = new JsonWriter(new FileWriter(fileName))) {
             gson.toJson(creditAccounts, new TypeToken<ArrayList<PaymentAccount>>() {}.getType(), writer);
         }
 
@@ -150,30 +150,36 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void transferPaymentAccounts(String fileName, User user) throws IOException {
-        JsonReader reader = new JsonReader(new FileReader(fileName));
-        ArrayList<PaymentAccount> paymentAccount = gson.fromJson(reader, new TypeToken<ArrayList<PaymentAccount>>() {
-        }.getType());
+        try (JsonReader reader = new JsonReader(new FileReader(fileName))) {
 
-        PaymentAccountRepository paymentAccountRepository = PaymentAccountRepository.getInstance();
-        for (int i = 0; i < paymentAccount.size(); i++) {
-            paymentAccountRepository.update(paymentAccount.get(i));
+            ArrayList<PaymentAccount> paymentAccount = gson.fromJson(reader, new TypeToken<ArrayList<PaymentAccount>>() {
+            }.getType());
+
+            PaymentAccountRepository paymentAccountRepository = PaymentAccountRepository.getInstance();
+            for (int i = 0; i < paymentAccount.size(); i++) {
+                paymentAccountRepository.update(paymentAccount.get(i));
+
+            }
 
         }
-        reader.close();
+
     }
 
     @Override
     public void transferCreditAccounts(String fileName, User user) throws IOException {
-        JsonReader reader = new JsonReader(new FileReader(fileName));
-        ArrayList<CreditAccount> creditAccount = gson.fromJson(reader, new TypeToken<ArrayList<CreditAccount>>() {
-        }.getType());
+        try (JsonReader reader = new JsonReader(new FileReader(fileName))) {
 
-        CreditAccountRepository creditAccountRepository = CreditAccountRepository.getInstance();
-        for (int i = 0; i < creditAccount.size(); i++) {
-            creditAccountRepository.update(creditAccount.get(i));
+            ArrayList<CreditAccount> creditAccount = gson.fromJson(reader, new TypeToken<ArrayList<CreditAccount>>() {
+            }.getType());
+
+            CreditAccountRepository creditAccountRepository = CreditAccountRepository.getInstance();
+            for (int i = 0; i < creditAccount.size(); i++) {
+                creditAccountRepository.update(creditAccount.get(i));
+
+            }
 
         }
-        reader.close();
+
     }
 
 
