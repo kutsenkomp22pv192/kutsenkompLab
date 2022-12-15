@@ -143,40 +143,54 @@ public class UserServiceImpl implements UserService {
                 .toList();
 
         try (JsonWriter writer = new JsonWriter(new FileWriter(fileName))) {
-            gson.toJson(creditAccounts, new TypeToken<ArrayList<PaymentAccount>>() {}.getType(), writer);
+            gson.toJson(creditAccounts, new TypeToken<ArrayList<CreditAccount>>() {}.getType(), writer);
         }
 
     }
 
     @Override
-    public void transferPaymentAccounts(String fileName, User user) throws IOException {
-        try (JsonReader reader = new JsonReader(new FileReader(fileName))) {
+    public void transferPaymentAccounts(String fileName, int finalBankId, int paymentAccountId) throws IOException {
+        PaymentAccountRepository paymentAccountRepository = PaymentAccountRepository.getInstance();
+        var paymentAccounts = paymentAccountRepository.findAll().stream()
+                .filter(paymentAccount -> paymentAccount.getId() == paymentAccountId).toList();
 
-            ArrayList<PaymentAccount> paymentAccount = gson.fromJson(reader, new TypeToken<ArrayList<PaymentAccount>>() {
+        try (JsonWriter writer = new JsonWriter(new FileWriter(fileName))) {
+            gson.toJson(paymentAccounts.get(0), new TypeToken<PaymentAccount>() {}.getType(), writer);
+        }
+
+        try (JsonReader reader = new JsonReader(new FileReader(fileName))) {
+            PaymentAccount paymentAccount = gson.fromJson(reader, new TypeToken<PaymentAccount>() {
             }.getType());
 
-            PaymentAccountRepository paymentAccountRepository = PaymentAccountRepository.getInstance();
-            for (int i = 0; i < paymentAccount.size(); i++) {
-                paymentAccountRepository.update(paymentAccount.get(i));
-
-            }
+            BankRepository bankRepository = BankRepository.getInstance();
+            var banks = bankRepository.findAll().stream()
+                    .filter(bank -> bank.getId() == finalBankId).toList();
+            paymentAccount.setBankName(banks.get(0).getName());
+            paymentAccountRepository.update(paymentAccount);
 
         }
 
     }
 
     @Override
-    public void transferCreditAccounts(String fileName, User user) throws IOException {
-        try (JsonReader reader = new JsonReader(new FileReader(fileName))) {
+    public void transferCreditAccounts(String fileName, int finalBankId, int creditAccountId) throws IOException {
+        CreditAccountRepository creditAccountRepository = CreditAccountRepository.getInstance();
+        var creditAccounts = creditAccountRepository.findAll().stream()
+                .filter(creditAccount -> creditAccount.getId() == creditAccountId).toList();
 
-            ArrayList<CreditAccount> creditAccount = gson.fromJson(reader, new TypeToken<ArrayList<CreditAccount>>() {
+        try (JsonWriter writer = new JsonWriter(new FileWriter(fileName))) {
+            gson.toJson(creditAccounts.get(0), new TypeToken<CreditAccount>() {}.getType(), writer);
+        }
+
+        try (JsonReader reader = new JsonReader(new FileReader(fileName))) {
+            CreditAccount creditAccount = gson.fromJson(reader, new TypeToken<CreditAccount>() {
             }.getType());
 
-            CreditAccountRepository creditAccountRepository = CreditAccountRepository.getInstance();
-            for (int i = 0; i < creditAccount.size(); i++) {
-                creditAccountRepository.update(creditAccount.get(i));
-
-            }
+            BankRepository bankRepository = BankRepository.getInstance();
+            var banks = bankRepository.findAll().stream()
+                    .filter(bank -> bank.getId() == finalBankId).toList();
+            creditAccount.setBankName(banks.get(0).getName());
+            creditAccountRepository.update(creditAccount);
 
         }
 

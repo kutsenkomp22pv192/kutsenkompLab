@@ -69,16 +69,10 @@ public class Main {
             userService.saveToFilePaymentAccounts("PaymentAccount.txt", bankService.getAll().get(0), userService.getAll().get(0));
             userService.saveToFileCreditAccounts("CreditAccount.txt", bankService.getAll().get(0), userService.getAll().get(0));
 
-            System.out.println("User before update:");
-            userService.outputUserAccounts(userService.getAll().get(0).getId(), System.out);
 
+            //перенос платежного счета 0 в банк 1
+            userService.transferPaymentAccounts("PaymentAccount2.txt", 1, 0);
 
-            //В файле обозначен перенос платежных считов полльзователя из банка 0 в банк 1
-            userService.transferPaymentAccounts("PaymentAccount2.txt", userService.getAll().get(0));
-
-
-            System.out.println("\nUser after update:");
-            userService.outputUserAccounts(userService.getAll().get(0).getId(), System.out);
 
         } catch (IOException e) {
             System.out.println("File error: " + e);
