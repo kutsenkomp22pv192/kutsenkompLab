@@ -1,8 +1,6 @@
 package tech.reliab.course.kutsenkomp.bank.service;
 
-import tech.reliab.course.kutsenkomp.bank.entity.Bank;
-import tech.reliab.course.kutsenkomp.bank.entity.Employee;
-import tech.reliab.course.kutsenkomp.bank.entity.User;
+import tech.reliab.course.kutsenkomp.bank.entity.*;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -19,6 +17,6 @@ public interface UserService {
 
     void saveToFilePaymentAccounts(String fileName, Bank bank, User user) throws IOException;
     void saveToFileCreditAccounts(String fileName, Bank bank, User user) throws IOException;
-    void transferPaymentAccounts(String fileName, int finalBankId, int paymentAccountId) throws IOException;
-    void transferCreditAccounts(String fileName, int finalBankId, int creditAccountId) throws IOException;
+    void transferPaymentAccounts(String fileName, Bank bank, PaymentAccount paymentAccount) throws IOException;
+    void transferCreditAccounts(String fileName, Bank bank, CreditAccount creditAccount) throws IOException;
 }

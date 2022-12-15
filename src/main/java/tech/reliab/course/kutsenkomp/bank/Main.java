@@ -71,7 +71,7 @@ public class Main {
 
 
             //перенос платежного счета 0 в банк 1
-            userService.transferPaymentAccounts("PaymentAccount2.txt", 1, 0);
+            userService.transferPaymentAccounts("PaymentAccount2.txt", bankService.getAll().get(1), paymentAccountService.getAll().get(0));
 
 
         } catch (IOException e) {
